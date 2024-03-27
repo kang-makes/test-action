@@ -11,12 +11,11 @@ jobs:
   on-pr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - id: environment
-        uses: ./
+      - id: major
+        uses: kang-makes/test-action@v0
       - uses: actions/github-script@v7
         env:
-          ENVS: ${{ steps.environment.outputs.envs }}
+          ENVS: ${{ steps.major.outputs.envs }}
         with:
           script: |
             const {ENVS} = process.env
@@ -25,5 +24,74 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `${ENVS}`
+              body: `Environment variables for major
+                ${ENVS}`
+            })
+
+      - id: minor
+        uses: kang-makes/test-action@v0.0
+      - uses: actions/github-script@v7
+        env:
+          ENVS: ${{ steps.minor.outputs.envs }}
+        with:
+          script: |
+            const {ENVS} = process.env
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Environment variables for minor
+                ${ENVS}`
+            })
+
+      - id: patch
+        uses: kang-makes/test-action@v0.0.1
+      - uses: actions/github-script@v7
+        env:
+          ENVS: ${{ steps.patch.outputs.envs }}
+        with:
+          script: |
+            const {ENVS} = process.env
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Environment variables for patch
+                ${ENVS}`
+            })
+
+      - id: branch
+        uses: kang-makes/test-action@main
+      - uses: actions/github-script@v7
+        env:
+          ENVS: ${{ steps.branch.outputs.envs }}
+        with:
+          script: |
+            const {ENVS} = process.env
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Environment variables for branch
+                ${ENVS}`
+            })
+
+      - id: commit
+        uses: kang-makes/test-action@df1ca395f43106543b0c86751220323d3a2b23f8
+      - uses: actions/github-script@v7
+        env:
+          ENVS: ${{ steps.commit.outputs.envs }}
+        with:
+          script: |
+            const {ENVS} = process.env
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Environment variables for commit
+                ${ENVS}`
             })
