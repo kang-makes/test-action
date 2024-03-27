@@ -1,0 +1,25 @@
+name: 'Get all environment variables'
+description: 'This action simply prints all environment variables and expose them in an output'
+outputs:
+  envs:
+    description: "A string printing all environment variables"
+    value: ${{ steps.out.outputs.envs }}
+runs:
+  using: "composite"
+  steps:
+    - name: Get all envs
+      id: envs
+      shell: bash
+      run: ( set -o posix ; set ) > envs
+
+    - name: Print all envs
+      shell: bash
+      run: cat envs
+
+    - name: Output all envs
+      id: out
+      shell: bash
+      run: |
+        echo 'envs<<EOF'  >> "$GITHUB_OUTPUT"
+        cat envs          >> "$GITHUB_OUTPUT"
+        echo EOF          >> "$GITHUB_OUTPUT"
