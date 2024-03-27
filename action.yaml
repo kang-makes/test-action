@@ -1,25 +1,22 @@
-name: 'Get all environment variables'
-description: 'This action simply prints all environment variables and expose them in an output'
+name: 'Print version of the action being used'
+description: 'This action simply prints the version that has being used to call this action'
 outputs:
-  envs:
-    description: "A string printing all environment variables"
-    value: ${{ steps.out.outputs.envs }}
+  version:
+    description: "A string printing the version"
+    value: ${{ steps.out.outputs.version }}
 runs:
   using: "composite"
   steps:
-    - name: Get all envs
-      id: envs
-      shell: bash
-      run: ( set -o posix ; set ) > envs
+    - id: version
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const path = require('node:path'); 
+          const {GITHUB_ACTION_PATH} = process.env
 
-    - name: Print all envs
-      shell: bash
-      run: cat envs
+          return path.basename(`${GITHUB_ACTION_PATH}`)
 
-    - name: Output all envs
+    - name: Output folder version
       id: out
       shell: bash
-      run: |
-        echo 'envs<<EOF'  >> "$GITHUB_OUTPUT"
-        cat envs          >> "$GITHUB_OUTPUT"
-        echo EOF          >> "$GITHUB_OUTPUT"
+      run: echo 'version=${{ steps.version.outputs.result }}' | tee -a "$GITHUB_OUTPUT"
