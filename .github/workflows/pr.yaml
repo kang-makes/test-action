@@ -80,7 +80,7 @@ jobs:
             })
 
       - id: commit
-        uses: kang-makes/test-action@f7d1bf9ea65ab389d242030c71cc3790b288d8d9
+        uses: kang-makes/test-action@cc93b0f0cfc918a9ada1d7e15062d2b5ef8878b5
       - uses: actions/github-script@v7
         env:
           VERSION: ${{ steps.commit.outputs.version }}
