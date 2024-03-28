@@ -46,7 +46,7 @@ jobs:
             })
 
       - id: patch
-        uses: kang-makes/test-action@v1.0.0
+        uses: kang-makes/test-action@v1.0.1
       - uses: actions/github-script@v7
         env:
           VERSION: ${{ steps.patch.outputs.version }}
