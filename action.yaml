@@ -10,6 +10,7 @@ runs:
     - id: version
       uses: actions/github-script@v7
       with:
+        result-encoding: string
         script: |
           const path = require('node:path'); 
           const {GITHUB_ACTION_PATH} = process.env
